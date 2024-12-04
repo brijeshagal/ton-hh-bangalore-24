@@ -5,6 +5,7 @@ import AutoRefresher from "@/components/refresher/AutoRefresher";
 import TypeWriter from "@/components/typewriter";
 import { VOL_DIVIDER } from "@/constants";
 import { preRace } from "@/constants/comentary/prerace";
+import { icons } from "@/junk/icons";
 import Tokens from "@/junk/memecoins";
 import { getColor } from "@/lib/utils";
 import { getVolumes } from "@/services/coingecko/volume";
@@ -71,16 +72,16 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // volumeRefresher();
-    setPoolVol(
-      Object.values(Tokens).reduce((acc, _, idx) => {
-        const mod = idx % 4;
-        return {
-          ...acc,
-          [mod]: Number((Math.random() * 100 * VOL_DIVIDER).toFixed(2)),
-        };
-      }, {} as Record<number, number>)
-    );
+    volumeRefresher();
+    // setPoolVol(
+    //   Object.values(Tokens).reduce((acc, _, idx) => {
+    //     const mod = idx % 4;
+    //     return {
+    //       ...acc,
+    //       [mod]: Number((Math.random() * 100 * VOL_DIVIDER).toFixed(2)),
+    //     };
+    //   }, {} as Record<number, number>)
+    // );
   }, []);
 
   console.log({ volumes });
@@ -140,6 +141,10 @@ export default function Home() {
                     <div className="absolute animate-pulse p-1 text-nowrap text-sm font-thin -right-[20px] bg-white text-center align-middle border-dashed border-gray-200">
                       {avgSpeed} kmph
                     </div>
+                    <img
+                      src={icons[numberIdx]}
+                      className="w-5 h-5 rounded-full absolute left-[12px] top-1"
+                    />
                     <Image
                       src={Horse}
                       className="w-20 h-20"

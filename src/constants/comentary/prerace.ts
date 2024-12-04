@@ -1,6 +1,6 @@
 export const preRace = [
-  "The race is about to begin! Who will take the lead?",
+  "The race is started! Who will take the lead?",
   "Placing your bets? Let's see who has the strongest coin!",
-  "Ready, set, race! The memecoins are revving up!",
+  "Ready, set, race! The meme coins are revving up!",
   "The horses are at the gates! Which coin will dominate?",
 ];
