@@ -1,9 +1,7 @@
+import "@fontsource/vt323";
+import { TonConnectUIProvider } from "@tonconnect/ui-react";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import { TmaSDKProvider } from "@/components/tma";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "My Telegram Mini App",
@@ -16,10 +14,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <TmaSDKProvider>{children}</TmaSDKProvider>
-      </body>
-    </html>
+    <TonConnectUIProvider manifestUrl="https://ton-hh-bangalore-24.vercel.app/tonconnect-manifest.json">
+      <html lang="en">
+        <body>{children}</body>
+      </html>
+    </TonConnectUIProvider>
   );
 }

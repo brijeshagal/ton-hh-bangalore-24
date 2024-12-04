@@ -1,12 +1,16 @@
 "use client";
 
 import AutoRefresher from "@/components/refresher/AutoRefresher";
+import TypeWriter from "@/components/typewriter";
 import { VOL_DIVIDER } from "@/constants";
+import { preRace } from "@/constants/comentary/prerace";
 import Tokens from "@/junk/memecoins";
 import { getVolumes } from "@/services/coingecko/volume";
+import { TonConnectButton } from "@tonconnect/ui-react";
 import Image from "next/image";
 import { useState } from "react";
 import Horse from "/public/spirit-pixel.gif";
+import Stadium1 from "/public/stadium1.jpg";
 
 export default function Home() {
   const [pools, setPools] = useState(
@@ -36,6 +40,7 @@ export default function Home() {
     }, {})
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [texts, setTexts] = useState(preRace[Math.floor(Math.random() * 5)]);
 
   const volumeRefresher = async () => {
     setIsLoading(true);
@@ -74,26 +79,34 @@ export default function Home() {
   console.log({ volumes });
 
   return (
-    <div className="w-screen h-screen bg-black">
+    <div className="w-screen h-screen bg-black relative">
       <AutoRefresher
         timeInterval={120}
         disableQuotesRefresh={false}
         refreshQuotes={volumeRefresher}
         isLoading={isLoading}
       />
-      <div className="h-1/4"></div>
-      <div className="flex flex-col relative w-full h-3/4 gap-10">
+      <div className="w-full h-full absolute">
+        <img
+          src={Stadium1.src}
+          className="w-full h-3/4 bg-cover"
+          alt={"stadium"}
+        />
+      </div>
+      <div className="h-1/4 w-full text-white">
+        <div className="max-w-[50% commentary-box">
+          <TypeWriter autoStart loop texts={[texts]} />
+        </div>
+      </div>
+      <div className="flex flex-col relative justify-center w-full h-1/2 gap-10">
         {Object.values(poolVol).map((avgPoolVolume, idx) => {
           const avgSpeed = (avgPoolVolume / VOL_DIVIDER).toFixed(2);
-          // const avgSpeed = avgPoolVolume.toFixed(2);
           return (
             <div
               key={idx}
               className={"relative transition-all duration-1000"}
               style={{
-                width: `${
-                  Number(avgSpeed) < 85 ? (Number(avgSpeed)) + 15 : 90
-                }%`,
+                width: `${Number(avgSpeed) < 85 ? Number(avgSpeed) + 15 : 90}%`,
               }}
             >
               <div className="w-fit h-fit ml-auto">
@@ -112,13 +125,21 @@ export default function Home() {
           );
         })}
       </div>
-      {/* <Image
-        src={Horse}
-        className="w-10 h-10"
-        width={20}
-        height={20}
-        alt="racer"
-      /> */}
+      <TonConnectButton />
+      <div className="relative h-1/4 flex w-full text-white items-center justify-between px-10">
+        <div className="">
+          <div>1</div>
+        </div>
+        <div className="">
+          <div>2</div>
+        </div>
+        <div className="">
+          <div>3</div>
+        </div>
+        <div className="">
+          <div>4</div>
+        </div>
+      </div>
     </div>
   );
 }
