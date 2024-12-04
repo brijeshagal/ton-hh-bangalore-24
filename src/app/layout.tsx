@@ -1,7 +1,7 @@
 import "@fontsource/vt323";
-import { TonConnectUIProvider } from "@tonconnect/ui-react";
 import type { Metadata } from "next";
 import "./globals.css";
+import Provider from "./Provider";
 
 export const metadata: Metadata = {
   title: "My Telegram Mini App",
@@ -14,10 +14,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <TonConnectUIProvider manifestUrl="https://ton-hh-bangalore-24.vercel.app/tonconnect-manifest.json">
-      <html lang="en">
-        <body>{children}</body>
-      </html>
-    </TonConnectUIProvider>
+    <html lang="en">
+      <body>
+        <Provider>{children}</Provider>
+      </body>
+    </html>
   );
 }

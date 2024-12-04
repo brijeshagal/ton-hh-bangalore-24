@@ -8,7 +8,7 @@ import Tokens from "@/junk/memecoins";
 import { getVolumes } from "@/services/coingecko/volume";
 import { TonConnectButton } from "@tonconnect/ui-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Horse from "/public/spirit-pixel.gif";
 import Stadium1 from "/public/stadium1.jpg";
 
@@ -24,16 +24,8 @@ export default function Home() {
       return acc;
     }, {} as Record<number, string[]>)
   );
-  const [poolVol, setPoolVol] = useState(
-    Object.values(Tokens).reduce((acc, _, idx) => {
-      const mod = idx % 4;
-      return {
-        ...acc,
-        [mod]: Math.random() * 100 * VOL_DIVIDER,
-      };
-    }, {} as Record<number, number>)
-  );
-  console.log(poolVol);
+  const [poolVol, setPoolVol] = useState<Record<number, number>>();
+
   const [volumes, setVolumes] = useState(
     Object.values(Tokens).reduce((acc, contract) => {
       return { ...acc, [contract]: 0 };
@@ -72,9 +64,18 @@ export default function Home() {
     setIsLoading(false);
   };
 
-  // useEffect(() => {
-  //   volumeRefresher();
-  // }, []);
+  useEffect(() => {
+    // volumeRefresher();
+    setPoolVol(
+      Object.values(Tokens).reduce((acc, _, idx) => {
+        const mod = idx % 4;
+        return {
+          ...acc,
+          [mod]: Number((Math.random() * 100 * VOL_DIVIDER).toFixed(2)),
+        };
+      }, {} as Record<number, number>)
+    );
+  }, []);
 
   console.log({ volumes });
 
@@ -86,7 +87,7 @@ export default function Home() {
         refreshQuotes={volumeRefresher}
         isLoading={isLoading}
       />
-      <div className="w-full h-full absolute">
+      <div className="w-full h-1/2 absolute">
         <img
           src={Stadium1.src}
           className="w-full h-3/4 bg-cover"
@@ -99,33 +100,36 @@ export default function Home() {
         </div>
       </div>
       <div className="flex flex-col relative justify-center w-full h-1/2 gap-10">
-        {Object.values(poolVol).map((avgPoolVolume, idx) => {
-          const avgSpeed = (avgPoolVolume / VOL_DIVIDER).toFixed(2);
-          return (
-            <div
-              key={idx}
-              className={"relative transition-all duration-1000"}
-              style={{
-                width: `${Number(avgSpeed) < 85 ? Number(avgSpeed) + 15 : 90}%`,
-              }}
-            >
-              <div className="w-fit h-fit ml-auto">
-                <div className="absolute p-1 text-nowrap -top-[24px] text-sm font-thin -right-[30px] bg-white text-center align-middle border-dashed border-gray-200">
-                  {avgSpeed} kmph
+        {poolVol &&
+          Object.values(poolVol).map((avgPoolVolume, idx) => {
+            const avgSpeed = (avgPoolVolume / VOL_DIVIDER).toFixed(2);
+            return (
+              <div
+                key={idx}
+                className={"relative transition-all duration-1000"}
+                style={{
+                  width: `${
+                    Number(avgSpeed) < 85 ? Number(avgSpeed) + 15 : 90
+                  }%`,
+                }}
+              >
+                <div className="w-fit h-fit ml-auto">
+                  <div className="absolute p-1 text-nowrap -top-[24px] text-sm font-thin -right-[30px] bg-white text-center align-middle border-dashed border-gray-200">
+                    {avgSpeed} kmph
+                  </div>
+                  <Image
+                    src={Horse}
+                    className="w-10 h-10"
+                    width={20}
+                    height={20}
+                    alt="racer"
+                  />
                 </div>
-                <Image
-                  src={Horse}
-                  className="w-10 h-10"
-                  width={20}
-                  height={20}
-                  alt="racer"
-                />
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
-      <TonConnectButton />
+      <TonConnectButton className="cursor-pointer" />
       <div className="relative h-1/4 flex w-full text-white items-center justify-between px-10">
         <div className="">
           <div>1</div>
