@@ -92,7 +92,7 @@ export default function Home() {
               className={"relative transition-all duration-1000"}
               style={{
                 width: `${
-                  Number(avgSpeed) < 85 ? Math.round(Number(avgSpeed)) + 15 : 90
+                  Number(avgSpeed) < 85 ? (Number(avgSpeed)) + 15 : 90
                 }%`,
               }}
             >
