@@ -1,5 +1,3 @@
-import { cn } from "@/lib/utils";
-
 type LogoProps = React.HTMLAttributes<SVGElement>;
 
 export function Logo(props: LogoProps) {
